@@ -12,14 +12,14 @@ TARGET_NUMBER = "+27798792873"
 
 client = Client(account_sid, auth_token)
 
-def send_notification():
+def send_notification(text):
     message = client.messages.create(
             to=TARGET_NUMBER,
             from_=TWILIO_NUMBER,
-            body="Refill dispenser!")
+            body=text)
 
 if __name__ == '__main__':
     consumer = KafkaConsumer('REFILL')
     for event in consumer:
         print(f'Dispenser requires refill: {event}')
-        send_notification()
+        send_notification(event.value)
